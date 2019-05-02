@@ -112,7 +112,7 @@ def calculate_stats(df, stats):
     start_time = time.time()
 
     # display total trips
-    total_trips = df.shape[0]
+    total_trips = len(df.index)
     print('TOTAL NUMBER OF TRIPS: {}'.format(total_trips))
 
     # display details for input stats

@@ -14,4 +14,9 @@ The following input data files are used:
 - washington.csv
 
 ### Credits
-It's important to give proper credit. Add links to any repo that inspired you or blogposts you consulted.
+Besides the training material provided by Udacity, I got inspiration from these websites:
+- https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row?noredirect=1&lq=1
+- https://stackoverflow.com/questions/6557553/get-month-name-from-number
+- https://stackoverflow.com/questions/5997987/is-there-an-operator-to-calculate-percentage-in-python
+- https://www.shanelynn.ie/summarising-aggregation-and-grouping-data-in-python-pandas/
+- https://github.com/bndr/pipreqs

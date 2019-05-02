@@ -20,10 +20,10 @@ def get_filters():
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
-    
+
     # welcome message
     print('\n' + '-'*60 + '\n\nHello! Let\'s explore some US bikeshare data! \n')
-    
+
     # get user input for city and give warning for invalid input
     while True:
         city = input('Enter city, valid values are:\n {}\n'.format(', '.join(CITY_DATA))).lower()
@@ -53,10 +53,10 @@ def get_filters():
     print('City = {}'.format(city))
     print('Month = {}'.format(month))
     print('Weekday = {}\n'.format(day))
-    
+
     # indicate end of user input section with line
     print('-'*60)
-    
+
     return city, month, day
 
 
@@ -107,14 +107,14 @@ def calculate_stats(df, stats):
         df - Pandas DataFrame containing city data filtered by month and weekday
         (tuple) stats - column name(s) in dataframe and description of all stats to be calculated
     """
-    
+
     # set start time
     start_time = time.time()
 
     # display total trips
-    total_trips = df['Start Time'].count()
+    total_trips = df.shape[0]
     print('TOTAL NUMBER OF TRIPS: {}'.format(total_trips))
-    
+
     # display details for input stats
     for stat in stats:
         if stat[0][0] == 'month' and len(stat[0]) == 1:
@@ -122,42 +122,42 @@ def calculate_stats(df, stats):
         else:
             stat_id = df.groupby(stat[0])['Start Time'].count().idxmax()
         if type(stat_id) is tuple:
-            stat_id = ', '.join(stat_id) 
+            stat_id = ', '.join(stat_id)
         stat_freq = df.groupby(stat[0])['Start Time'].count().max()
         stat_pct = stat_freq / total_trips
         stat_desc = stat[1]
         print('{}: {} ({} trips, {:.1%})'.format(stat_desc, stat_id, stat_freq, stat_pct))
-    
+
     # display calculation time
     print('\nThis took %s seconds.\n' % round((time.time() - start_time), 3))
     print('-'*60)
     time.sleep(1)
-    
+
 
 def time_stats(df):
     """
-    Displays statistics on the most frequent times of travel. Uses generic function 
+    Displays statistics on the most frequent times of travel. Uses generic function
     "calculate_stats" to calculate and display statistics.
 
     Args:
         df - Pandas DataFrame containing city data filtered by month and weekday
-    """ 
-    
+    """
+
     # define stats to calculate
     stats = ( (['month'], 'MOST FREQUENT MONTH'),
               (['day_of_week'], 'MOST FREQUENT WEEKDAY'),
               (['hour'], 'MOST FREQUENT HOUR') )
-    
+
     # calculate and display stats defined
     print('\nCalculating The Most Frequent Times of Travel...\n')
     calculate_stats(df, stats)
-        
-    
+
+
 def station_stats(df):
     """
-    Displays statistics on the most popular stations and trip. Uses generic function 
+    Displays statistics on the most popular stations and trip. Uses generic function
     "calculate_stats" to calculate and display statistics.
-    
+
     Args:
         df - Pandas DataFrame containing city data filtered by month and weekday
     """
@@ -166,7 +166,7 @@ def station_stats(df):
     stats = ( (['Start Station'], 'MOST POPULAR START STATION'),
               (['End Station'], 'MOST POPULAR END STATION'),
               (['Start Station', 'End Station'], 'MOST POPULAR TRIP') )
-    
+
     # calculate and display stats defined
     print('\nCalculating The Most Popular Stations and Trip...\n')
     calculate_stats(df, stats)
@@ -175,7 +175,7 @@ def station_stats(df):
 def trip_duration_stats(df):
     """
     Displays statistics on the total and average trip duration.
-    
+
     Args:
         df - Pandas DataFrame containing city data filtered by month and weekday
     """
@@ -195,17 +195,17 @@ def trip_duration_stats(df):
     mean_time_min = int(mean_time // 60)
     mean_time_sec = int(mean_time % 60)
     print('MEAN TRAVEL TIME: {} minutes {} seconds'.format(mean_time_min, mean_time_sec))
-    
+
     # display calculation time
     print('\nThis took %s seconds.\n' % round((time.time() - start_time), 3))
     print('-'*60)
     time.sleep(1)
-    
+
 
 def user_stats(df):
     """
     Displays statistics on bikeshare users.
-    
+
     Args:
         df - Pandas DataFrame containing city data filtered by month and weekday
     """
@@ -213,7 +213,7 @@ def user_stats(df):
     # display stats to be calculated
     print('\nCalculating User Stats...\n')
     start_time = time.time()
-    
+
     # display counts of user types
     total_user = df['User Type'].count()
     user_value = df.groupby(['User Type']).size().rename('Count').reset_index()
@@ -221,7 +221,7 @@ def user_stats(df):
     user_value['Pct of Total'] = round(100 * (user_value.Count / total_user), 1)
     user_value.set_index('User Type', inplace=True)
     print('USER TYPE DISTRIBUTION:\n{}\n'.format(user_value))
-    
+
     # display counts of gender
     if 'Gender' in df.columns:
         df[['Gender']] = df[['Gender']].fillna(value='Unknown')
@@ -245,13 +245,13 @@ def user_stats(df):
         print('BIRTH YEAR DETAILS:\n{}'.format(birth_year))
     else:
         print('BIRTH YEAR DETAILS:\nNo birth year data is available for city chosen.\n')
-        
+
     # display calculation time
     print('\nThis took %s seconds.\n' % round((time.time() - start_time), 3))
     print('-'*60)
     time.sleep(1)
 
-    
+
 def present_data(df):
     """
     Present raw data for the specified city and filters by month and day if applicable.
@@ -259,13 +259,13 @@ def present_data(df):
     Args:
         df - Pandas DataFrame containing city data filtered by month and day
     """
-    
+
     # information about which part of program is run
     print('\nDisplaying raw data details...')
-    
+
     # set counter to be used when presenting row data
     row_start = 0
-    
+
     # ask user if they want to see raw data
     while True:
         # prompt for user input
@@ -273,28 +273,28 @@ def present_data(df):
             restart = input('\nWould you like to see raw data for 5 trips? Enter yes or no.\n')
         else:
             restart = input('\nWould you like to see 5 more trips? Enter yes or no.\n')
-        
+
         # restart or stop function
         if restart.lower() != 'yes':
             print('\n' + '-'*60)
             break
-        
+
         # present raw data
         for i in range(row_start, row_start + 5):
             if i <= len(df):
                 df_transposed = df.iloc[i]
                 print('\nTRIP {}:\n--------\n{}'.format(i+1, df_transposed.T.to_string()))
-        
+
         # increase row start with 5
         row_start += 5
-    
+
 
 def main():
     try:
         while True:
             # get user input
             city, month, day = get_filters()
-            
+
             # load data
             df = load_data(city, month, day)
 
@@ -314,7 +314,7 @@ def main():
                 break
     except KeyboardInterrupt:
         print('\n' + '-'*60 + '\n\nWARNING; program interrupted by user.')
-    except:        
+    except:
         print('\n' + '-'*60 + '\n\nWARNING; unknown exception, program will close.')
     finally:
         print('\nProgram has been ended.\n\n' + '-'*60)
